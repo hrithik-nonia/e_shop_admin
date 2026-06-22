@@ -1,8 +1,18 @@
-import { Search, Bell, ChevronDown, Menu } from "lucide-react";
+import {
+  Search,
+  Bell,
+  ChevronDown,
+  Menu,
+  Home,
+  Archive,
+  FileText,
+  Settings,
+  User,
+} from "lucide-react";
 export default function Navbar() {
   return (
     <>
-      <div className="w-full bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
+      <div className=" w-full bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between ">
         {/* Mobile Hamburger */}
         <button className="lg:hidden">
           <Menu className="w-6 h-6 text-gray-700" />
@@ -38,7 +48,7 @@ export default function Navbar() {
           </button>
 
           {/* Profile */}
-          <div className="flex items-center gap-2 cursor-pointer">
+          <div className="lg:flex items-center gap-2 cursor-pointer hidden">
             <img
               src="https://i.pravatar.cc/40?img=47"
               alt="Sarah Jenkins"
@@ -49,7 +59,50 @@ export default function Navbar() {
             </span>
             <ChevronDown className="w-4 h-4 text-gray-400" />
           </div>
+
+          {/* profile on mobile */}
+          <img
+            src="https://i.pravatar.cc/40?img=47"
+            alt="Sarah Jenkins"
+            className="w-8 h-8 rounded-full object-cover md:hidden"
+          />
         </div>
+      </div>
+
+      {/* bottom navbar for mobile */}
+      <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 px-6 py-2 flex items-center justify-between md:hidden z-50">
+        {/* Home */}
+        <button className="flex flex-col items-center gap-1 text-gray-900">
+          <Home className="w-5 h-5" strokeWidth={1.8} />
+          <span className="text-xs font-medium">Home</span>
+        </button>
+
+        {/* Inventory with dropdown */}
+        <button className="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-600">
+          <div className="flex items-center gap-0.5">
+            <Archive className="w-5 h-5" strokeWidth={1.8} />
+            <ChevronDown className="w-3 h-3" strokeWidth={2} />
+          </div>
+          <span className="text-xs">Inventory</span>
+        </button>
+
+        {/* Orders */}
+        <button className="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-600">
+          <FileText className="w-5 h-5" strokeWidth={1.8} />
+          <span className="text-xs">Orders</span>
+        </button>
+
+        {/* Settings */}
+        <button className="flex flex-col items-center gap-1 text-gray-400 hover:text-gray-600">
+          <Settings className="w-5 h-5" strokeWidth={1.8} />
+          <span className="text-xs">Settings</span>
+        </button>
+
+        {/* Profile icon */}
+        <button className="text-gray-400 hover:text-gray-600">
+          <User className="w-6 h-6" strokeWidth={1.8} />
+          <span className="text-xs">Profile</span>
+        </button>
       </div>
     </>
   );
