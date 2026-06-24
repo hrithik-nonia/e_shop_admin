@@ -1,94 +1,11 @@
-import { ShoppingCart, User, TrendingDown, X } from "lucide-react";
+import { X } from "lucide-react";
 
-// temp notification
-const notifications = [
-  {
-    id: 1,
-    icon: ShoppingCart,
-    iconBg: "bg-slate-100",
-    iconColor: "text-slate-600",
-    title: "NEW ORDER",
-    time: "5m ago",
-    body: (
-      <>
-        Order #12345 from John Doe (₹5,600).{" "}
-        <a href="#" className="text-blue-600 hover:underline">
-          View Details.
-        </a>
-      </>
-    ),
-  },
-  {
-    id: 2,
-    icon: User,
-    iconBg: "bg-slate-100",
-    iconColor: "text-slate-600",
-    title: "PRODUCT UPDATED",
-    time: "1h ago",
-    body: "A new admin (Michael Brown) updated 'iPhone 13' stock levels.",
-  },
-  {
-    id: 3,
-    icon: TrendingDown,
-    iconBg: "bg-amber-100",
-    iconColor: "text-amber-600",
-    title: "LOW STOCK ALERT",
-    time: "2h ago",
-    body: "iPhone 13 Mafk (SKU A-103) is at critical level (2 units). Restock recommended.",
-  },
-  {
-    id: 3,
-    icon: TrendingDown,
-    iconBg: "bg-amber-100",
-    iconColor: "text-amber-600",
-    title: "LOW STOCK ALERT",
-    time: "2h ago",
-    body: "iPhone 13 Mafk (SKU A-103) is at critical level (2 units). Restock recommended.",
-  },
-  {
-    id: 3,
-    icon: TrendingDown,
-    iconBg: "bg-amber-100",
-    iconColor: "text-amber-600",
-    title: "LOW STOCK ALERT",
-    time: "2h ago",
-    body: "iPhone 13 Mafk (SKU A-103) is at critical level (2 units). Restock recommended.",
-  },
-  {
-    id: 3,
-    icon: TrendingDown,
-    iconBg: "bg-amber-100",
-    iconColor: "text-amber-600",
-    title: "LOW STOCK ALERT",
-    time: "2h ago",
-    body: "iPhone 13 Mafk (SKU A-103) is at critical level (2 units). Restock recommended.",
-  },
-  {
-    id: 3,
-    icon: TrendingDown,
-    iconBg: "bg-amber-100",
-    iconColor: "text-amber-600",
-    title: "LOW STOCK ALERT",
-    time: "2h ago",
-    body: "iPhone 13 Mafk (SKU A-103) is at critical level (2 units). Restock recommended.",
-  },
-  {
-    id: 3,
-    icon: TrendingDown,
-    iconBg: "bg-amber-100",
-    iconColor: "text-amber-600",
-    title: "LOW STOCK ALERT",
-    time: "2h ago",
-    body: "iPhone 13 Mafk (SKU A-103) is at critical level (2 units). Restock recommended.",
-  },
-];
-
-export default function NotificationsPanel({ onClose }) {
+export default function NotificationsPanel({ onClose, notifications }) {
   return (
-    <div className="flex min-h-screen items-start justify-center pt-16 absolute right-10 top-10 z-10">
-      <div className="w-[380px] h-[350px] overflow-scroll rounded-xl border border-gray-100 bg-white shadow-xl">
+    <div className="absolute md:right-10 md:top-26 top-16 z-10 ">
+      <div className="w-[380px] h-[350px] overflow-scroll rounded-xl border border-gray-100 bg-white shadow-xl ">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+        <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4 sticky top-0 z-10 bg-white">
           <h2 className="text-sm font-bold tracking-wide text-gray-900">
             NOTIFICATIONS
           </h2>

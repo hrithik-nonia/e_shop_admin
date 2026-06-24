@@ -8,14 +8,106 @@ import {
   FileText,
   Settings,
   User,
+  ShoppingCart,
+  TrendingDown,
 } from "lucide-react";
 
+// component imports
 import NotificationsPanel from "./notification_panel";
+import ProfileSettingsModal from "./profile_setting_model";
+
 import { useState } from "react";
+
+// temp notification
+const notifications = [
+  {
+    id: 1,
+    icon: ShoppingCart,
+    iconBg: "bg-slate-100",
+    iconColor: "text-slate-600",
+    title: "NEW ORDER",
+    time: "5m ago",
+    body: (
+      <>
+        Order #12345 from John Doe (₹5,600).{" "}
+        <a href="#" className="text-blue-600 hover:underline">
+          View Details.
+        </a>
+      </>
+    ),
+  },
+  {
+    id: 2,
+    icon: User,
+    iconBg: "bg-slate-100",
+    iconColor: "text-slate-600",
+    title: "PRODUCT UPDATED",
+    time: "1h ago",
+    body: "A new admin (Michael Brown) updated 'iPhone 13' stock levels.",
+  },
+  {
+    id: 3,
+    icon: TrendingDown,
+    iconBg: "bg-amber-100",
+    iconColor: "text-amber-600",
+    title: "LOW STOCK ALERT",
+    time: "2h ago",
+    body: "iPhone 13 Mafk (SKU A-103) is at critical level (2 units). Restock recommended.",
+  },
+  {
+    id: 3,
+    icon: TrendingDown,
+    iconBg: "bg-amber-100",
+    iconColor: "text-amber-600",
+    title: "LOW STOCK ALERT",
+    time: "2h ago",
+    body: "iPhone 13 Mafk (SKU A-103) is at critical level (2 units). Restock recommended.",
+  },
+  {
+    id: 3,
+    icon: TrendingDown,
+    iconBg: "bg-amber-100",
+    iconColor: "text-amber-600",
+    title: "LOW STOCK ALERT",
+    time: "2h ago",
+    body: "iPhone 13 Mafk (SKU A-103) is at critical level (2 units). Restock recommended.",
+  },
+  {
+    id: 3,
+    icon: TrendingDown,
+    iconBg: "bg-amber-100",
+    iconColor: "text-amber-600",
+    title: "LOW STOCK ALERT",
+    time: "2h ago",
+    body: "iPhone 13 Mafk (SKU A-103) is at critical level (2 units). Restock recommended.",
+  },
+  {
+    id: 3,
+    icon: TrendingDown,
+    iconBg: "bg-amber-100",
+    iconColor: "text-amber-600",
+    title: "LOW STOCK ALERT",
+    time: "2h ago",
+    body: "iPhone 13 Mafk (SKU A-103) is at critical level (2 units). Restock recommended.",
+  },
+  {
+    id: 3,
+    icon: TrendingDown,
+    iconBg: "bg-amber-100",
+    iconColor: "text-amber-600",
+    title: "LOW STOCK ALERT",
+    time: "2h ago",
+    body: "iPhone 13 Mafk (SKU A-103) is at critical level (2 units). Restock recommended.",
+  },
+];
 
 export default function Navbar() {
   // state for NotificationsPanel show
   const [showNotificationsPanel, setShowNotificationsPanel] = useState(false);
+
+  // state for ProfileSettingsModal show
+  const [showProfileSettingsModal, setShowProfileSettingsModal] =
+    useState(false);
   return (
     <>
       <div className=" w-full bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between relative">
@@ -52,12 +144,15 @@ export default function Navbar() {
           >
             <Bell className="w-5 h-5" />
             <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] leading-none font-medium rounded-full w-4 h-4 flex items-center justify-center">
-              3
+              {notifications.length}
             </span>
           </button>
 
           {/* Profile */}
-          <div className="lg:flex items-center gap-2 cursor-pointer hidden">
+          <div
+            className="lg:flex items-center gap-2 cursor-pointer hidden "
+            onClick={() => setShowProfileSettingsModal(true)}
+          >
             <img
               src="https://i.pravatar.cc/40?img=47"
               alt="Sarah Jenkins"
@@ -74,6 +169,7 @@ export default function Navbar() {
             src="https://i.pravatar.cc/40?img=47"
             alt="Sarah Jenkins"
             className="w-8 h-8 rounded-full object-cover md:hidden"
+            onClick={() => setShowProfileSettingsModal(true)}
           />
         </div>
       </div>
@@ -116,7 +212,17 @@ export default function Navbar() {
 
       {/* show NotificationsPanel */}
       {showNotificationsPanel && (
-        <NotificationsPanel onClose={() => setShowNotificationsPanel(false)} />
+        <NotificationsPanel
+          onClose={() => setShowNotificationsPanel(false)}
+          notifications={notifications}
+        />
+      )}
+
+      {/* show Profile Settings Modal */}
+      {showProfileSettingsModal && (
+        <ProfileSettingsModal
+          onClose={() => setShowProfileSettingsModal(false)}
+        />
       )}
     </>
   );
