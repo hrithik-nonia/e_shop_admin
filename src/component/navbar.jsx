@@ -9,10 +9,16 @@ import {
   Settings,
   User,
 } from "lucide-react";
+
+import NotificationsPanel from "./notification_panel";
+import { useState } from "react";
+
 export default function Navbar() {
+  // state for NotificationsPanel show
+  const [showNotificationsPanel, setShowNotificationsPanel] = useState(false);
   return (
     <>
-      <div className=" w-full bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between ">
+      <div className=" w-full bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between relative">
         {/* Mobile Hamburger */}
         <button className="lg:hidden">
           <Menu className="w-6 h-6 text-gray-700" />
@@ -40,7 +46,10 @@ export default function Navbar() {
           </div>
 
           {/* Notification bell */}
-          <button className="relative text-gray-500 hover:text-gray-700">
+          <button
+            className="relative text-gray-500 hover:text-gray-700"
+            onClick={() => setShowNotificationsPanel(true)}
+          >
             <Bell className="w-5 h-5" />
             <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] leading-none font-medium rounded-full w-4 h-4 flex items-center justify-center">
               3
@@ -104,6 +113,11 @@ export default function Navbar() {
           <span className="text-xs">Profile</span>
         </button>
       </div>
+
+      {/* show NotificationsPanel */}
+      {showNotificationsPanel && (
+        <NotificationsPanel onClose={() => setShowNotificationsPanel(false)} />
+      )}
     </>
   );
 }
