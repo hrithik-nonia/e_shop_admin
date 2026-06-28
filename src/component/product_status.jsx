@@ -10,6 +10,7 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
+import CategoryFilterSidebar from "./filter_category_dropdown";
 import AddProductForm from "./add_product";
 import axios from "axios";
 const products = [
@@ -55,11 +56,6 @@ const products = [
   },
 ];
 
-// filter products by in stock and draft
-const filteredProducts = products.filter(
-  (pro) => pro.status === "In Stock" || pro.status === "Draft",
-);
-
 const statusStyles = {
   "In Stock": "bg-green-100 text-green-700",
   "Out of Stock": "bg-red-100 text-red-600",
@@ -70,8 +66,10 @@ export default function ProductsDashboard() {
   // state for show add product panel
   const [showAddProductForm, setShowAddProductForm] = useState(false);
   const [selected, setSelected] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(false);
 
-  // product count fetch kiya
+  // product count
+  // total product count
   const [productCount, setProductCount] = useState(0);
 
   useEffect(() => {
@@ -89,6 +87,42 @@ export default function ProductsDashboard() {
     fetchProductCount();
   }, []);
 
+  // active product count
+  const [activeProductCount, setActiveProductCount] = useState(0);
+
+  useEffect(() => {
+    const fetchActiveProductCount = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/products/active_count",
+        );
+
+        setActiveProductCount(response.data); // ya jo bhi key ho response mein
+      } catch (err) {
+        console.error("Failed to fetch active product count:", err);
+      }
+    };
+    fetchActiveProductCount();
+  }, []);
+
+  // low stock product count
+  const [lowStockProductCount, setLowStockProductCount] = useState(0);
+
+  useEffect(() => {
+    const fetchLowStockProductCount = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/products/low_stock_count",
+        );
+
+        setLowStockProductCount(response.data); // ya jo bhi key ho response mein
+      } catch (err) {
+        console.error("Failed to fetch low stock product count:", err);
+      }
+    };
+    fetchLowStockProductCount();
+  }, []);
+
   const stats = [
     {
       label: "Total Products",
@@ -99,14 +133,14 @@ export default function ProductsDashboard() {
     },
     {
       label: "Active Products",
-      value: filteredProducts.length,
+      value: activeProductCount,
       icon: PieChart,
       bg: "bg-blue-50",
       color: "text-blue-500",
     },
     {
       label: "Low Stock",
-      value: "15",
+      value: lowStockProductCount,
       icon: TrendingDown,
       bg: "bg-amber-50",
       color: "text-amber-500",
@@ -173,10 +207,18 @@ export default function ProductsDashboard() {
               </div>
 
               {/* filter dropdown */}
-              <button className="md:flex items-center gap-1.5 px-3 py-2 rounded-md border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 hidden ">
+              <button
+                className="md:flex items-center gap-1.5 px-3 py-2 rounded-md border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 hidden "
+                onClick={() => setSelectedCategory(true)}
+              >
                 Filter by Category
                 <ChevronDown className="w-4 h-4" />
               </button>
+              {selectedCategory && (
+                <CategoryFilterSidebar
+                  onClose={() => setSelectedCategory(false)}
+                />
+              )}
 
               {/* add product button */}
               <button
