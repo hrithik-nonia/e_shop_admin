@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { AppContext } from "../app_context/context";
+
 import {
   Store,
   LayoutGrid,
@@ -10,19 +12,27 @@ import {
   LogOut,
   ChevronDown,
 } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
-  const [productsOpen, setProductsOpen] = useState(true);
-  const [ordersOpen, setOrdersOpen] = useState(true);
-  const [activeItem, setActiveItem] = useState("All Products");
+  // take value from context
+  const { setShowAddProductForm, setShowEditProductModel } =
+    useContext(AppContext);
 
-  const productLinks = ["All Products", "Add Product", "Edit Product"];
+  const [productsOpen, setProductsOpen] = useState(false);
+  const [ordersOpen, setOrdersOpen] = useState(false);
+
+  const productLinks = [
+    { link: "/products", text: "All Products" },
+    { link: "/products/add", text: "Add Product" },
+    { link: "/products/edit", text: "Edit Product" },
+  ];
   const orderLinks = [
-    "All Orders",
-    "Pending",
-    "Processing",
-    "Delivered",
-    "Cancelled",
+    { text: "All Orders", link: "/orders" },
+    { text: "Pending", link: "/orders/pending" },
+    { text: "Processing", link: "/orders/processing" },
+    { text: "Delivered", link: "/orders/delivered" },
+    { text: "Cancelled", link: "/orders/cancelled" },
   ];
 
   return (
@@ -39,10 +49,13 @@ export default function Sidebar() {
 
       <nav className="flex-1 px-3 space-y-1 text-sm">
         {/* Dashboard */}
-        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-gray-200 hover:bg-white/5">
+        <NavLink
+          to={"/"}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-gray-200 hover:bg-white/5"
+        >
           <LayoutGrid className="w-4 h-4" strokeWidth={1.8} />
           <span>Dashboard</span>
-        </button>
+        </NavLink>
 
         {/* Products */}
         <button
@@ -58,20 +71,29 @@ export default function Sidebar() {
           />
         </button>
         {productsOpen && (
-          <div className="ml-4 border-l border-white/10 pl-4 space-y-0.5">
-            {productLinks.map((link) => (
-              <button
-                key={link}
-                onClick={() => setActiveItem(link)}
-                className={`w-full text-left px-3 py-2 rounded-md text-sm ${
-                  activeItem === link
-                    ? "bg-blue-500/15 text-blue-400 border-l-2 border-blue-500 -ml-[2px] pl-[14px]"
-                    : "text-gray-400 hover:text-gray-200"
-                }`}
-              >
-                {link}
-              </button>
-            ))}
+          <div className="ml-4 border-l border-white/10 pl-4 space-y-0.5 flex flex-col">
+            <NavLink
+              to="/products"
+              className="w-full text-left px-3 py-2 rounded-md text-sm  text-gray-400 hover:text-gray-200"
+            >
+              All Products
+            </NavLink>
+
+            {/* Add Product */}
+            <button
+              className="w-full text-left px-3 py-2 rounded-md text-sm  text-gray-400 hover:text-gray-200"
+              onClick={() => setShowAddProductForm(true)}
+            >
+              Add Product
+            </button>
+
+            {/* edit product */}
+            <button
+              className="w-full text-left px-3 py-2 rounded-md text-sm  text-gray-400 hover:text-gray-200"
+              onClick={() => setShowEditProductModel(true)}
+            >
+              Edit Product
+            </button>
           </div>
         )}
 
@@ -89,20 +111,13 @@ export default function Sidebar() {
           />
         </button>
         {ordersOpen && (
-          <div className="ml-4 border-l border-white/10 pl-4 space-y-0.5">
-            {orderLinks.map((link) => (
-              <button
-                key={link}
-                onClick={() => setActiveItem(link)}
-                className={`w-full text-left px-3 py-2 rounded-md text-sm ${
-                  activeItem === link
-                    ? "bg-blue-500/15 text-blue-400 border-l-2 border-blue-500 -ml-[2px] pl-[14px]"
-                    : "text-gray-400 hover:text-gray-200"
-                }`}
-              >
-                {link}
-              </button>
-            ))}
+          <div className="ml-4 border-l border-white/10 pl-4 space-y-0.5 flex flex-col">
+            <NavLink
+              to="/orders"
+              className="w-full text-left px-3 py-2 rounded-md text-sm text-gray-400 hover:text-gray-200"
+            >
+              All Orders
+            </NavLink>
           </div>
         )}
 

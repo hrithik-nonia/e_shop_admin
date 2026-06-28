@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   Package,
   PieChart,
@@ -13,6 +13,8 @@ import {
 import CategoryFilterSidebar from "./filter_category_dropdown";
 import AddProductForm from "./add_product";
 import axios from "axios";
+import { AppContext } from "../app_context/context";
+import EditProductModal from "./edit_product_model";
 const products = [
   {
     id: 1,
@@ -63,8 +65,14 @@ const statusStyles = {
 };
 
 export default function ProductsDashboard() {
+  // take value from context
+  const {
+    showAddProductForm,
+    setShowAddProductForm,
+    showEditProductModel,
+    setShowEditProductModel,
+  } = useContext(AppContext);
   // state for show add product panel
-  const [showAddProductForm, setShowAddProductForm] = useState(false);
   const [selected, setSelected] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(false);
 
@@ -280,7 +288,10 @@ export default function ProductsDashboard() {
                     </td>
                     <td className="px-3 py-3">
                       <div className="flex items-center gap-3">
-                        <button className="text-blue-500 hover:text-blue-700">
+                        <button
+                          className="text-blue-500 hover:text-blue-700"
+                          onClick={() => setShowEditProductModel(true)}
+                        >
                           <Pencil className="w-4 h-4" />
                         </button>
                         <button className="text-red-500 hover:text-red-700">
@@ -321,6 +332,11 @@ export default function ProductsDashboard() {
         {/* show add product panel */}
         {showAddProductForm && (
           <AddProductForm onClose={() => setShowAddProductForm(false)} />
+        )}
+
+        {/* show edit product model */}
+        {showEditProductModel && (
+          <EditProductModal onClose={() => setShowEditProductModel(false)} />
         )}
       </div>
     </>
