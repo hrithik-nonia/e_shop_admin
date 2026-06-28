@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Package,
   PieChart,
@@ -11,7 +11,7 @@ import {
   Trash2,
 } from "lucide-react";
 import AddProductForm from "./add_product";
-
+import axios from "axios";
 const products = [
   {
     id: 1,
@@ -60,37 +60,6 @@ const filteredProducts = products.filter(
   (pro) => pro.status === "In Stock" || pro.status === "Draft",
 );
 
-const stats = [
-  {
-    label: "Total Products",
-    value: products.length,
-    icon: Package,
-    bg: "bg-blue-50",
-    color: "text-blue-500",
-  },
-  {
-    label: "Active Products",
-    value: filteredProducts.length,
-    icon: PieChart,
-    bg: "bg-blue-50",
-    color: "text-blue-500",
-  },
-  {
-    label: "Low Stock",
-    value: "15",
-    icon: TrendingDown,
-    bg: "bg-amber-50",
-    color: "text-amber-500",
-  },
-  {
-    label: "Total Sales",
-    value: "$34,890",
-    icon: DollarSign,
-    bg: "bg-green-50",
-    color: "text-green-500",
-  },
-];
-
 const statusStyles = {
   "In Stock": "bg-green-100 text-green-700",
   "Out of Stock": "bg-red-100 text-red-600",
@@ -101,6 +70,57 @@ export default function ProductsDashboard() {
   // state for show add product panel
   const [showAddProductForm, setShowAddProductForm] = useState(false);
   const [selected, setSelected] = useState([]);
+
+  // product count fetch kiya
+  const [productCount, setProductCount] = useState(0);
+
+  useEffect(() => {
+    const fetchProductCount = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/products/count",
+        );
+
+        setProductCount(response.data); // ya jo bhi key ho response mein
+      } catch (err) {
+        console.error("Failed to fetch product count:", err);
+      }
+    };
+    fetchProductCount();
+  }, []);
+
+  const stats = [
+    {
+      label: "Total Products",
+      value: productCount,
+      icon: Package,
+      bg: "bg-blue-50",
+      color: "text-blue-500",
+    },
+    {
+      label: "Active Products",
+      value: filteredProducts.length,
+      icon: PieChart,
+      bg: "bg-blue-50",
+      color: "text-blue-500",
+    },
+    {
+      label: "Low Stock",
+      value: "15",
+      icon: TrendingDown,
+      bg: "bg-amber-50",
+      color: "text-amber-500",
+    },
+    {
+      label: "Total Sales",
+      value: "$34,890",
+      icon: DollarSign,
+      bg: "bg-green-50",
+      color: "text-green-500",
+    },
+  ];
+
+  // --------------------------------
 
   const toggleSelect = (id) => {
     setSelected((prev) =>

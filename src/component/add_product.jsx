@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import axios from "axios";
 
 export default function AddProductForm({ onClose }) {
@@ -6,6 +6,9 @@ export default function AddProductForm({ onClose }) {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  // duble click karne per image hatane ke liya
+  const fileInputRef = useRef(null);
 
   // state for image upload progress
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -57,10 +60,15 @@ export default function AddProductForm({ onClose }) {
     data.append("stock", formData.stock);
 
     try {
-      await axios.post("http://localhost:8000/products", data, {
+      await axios.post("http://localhost:8000/api/products/create", data, {
         onUploadProgress: (e) => {
-          const percent = Math.round((e.loaded * 100) / e.total);
-          setUploadProgress(percent);
+          if (e.total) {
+            const percent = Math.round((e.loaded * 100) / e.total);
+            setUploadProgress(percent);
+          } else {
+            // total na mile to indeterminate progress simulate karo
+            setUploadProgress((prev) => Math.min(prev + 10, 90));
+          }
         },
       });
 
@@ -210,6 +218,7 @@ export default function AddProductForm({ onClose }) {
 
               <div className="rounded-md border-2 border-dashed border-gray-300 bg-gray-50 lg:h-60 h-30 text-gray-400 transition-colors hover:border-gray-400 hover:bg-gray-100 relative ">
                 <input
+                  ref={fileInputRef}
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
@@ -224,6 +233,10 @@ export default function AddProductForm({ onClose }) {
                     onDoubleClick={() => {
                       setPreview(null);
                       setImage(null);
+
+                      if (fileInputRef.current) {
+                        fileInputRef.current.value = "";
+                      }
                     }}
                   />
                 )}
