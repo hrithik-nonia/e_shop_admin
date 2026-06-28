@@ -10,11 +10,11 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
-import CategoryFilterSidebar from "./filter_category_dropdown";
-import AddProductForm from "./add_product";
+import CategoryFilterSidebar from "../component/filter_category_dropdown";
+import AddProductForm from "../component/add_product";
 import axios from "axios";
 import { AppContext } from "../app_context/context";
-import EditProductModal from "./edit_product_model";
+import EditProductModal from "../component/edit_product_model";
 const products = [
   {
     id: 1,

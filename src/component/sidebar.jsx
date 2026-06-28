@@ -22,17 +22,12 @@ export default function Sidebar() {
   const [productsOpen, setProductsOpen] = useState(false);
   const [ordersOpen, setOrdersOpen] = useState(false);
 
-  const productLinks = [
-    { link: "/products", text: "All Products" },
-    { link: "/products/add", text: "Add Product" },
-    { link: "/products/edit", text: "Edit Product" },
-  ];
+  // order links
   const orderLinks = [
-    { text: "All Orders", link: "/orders" },
-    { text: "Pending", link: "/orders/pending" },
-    { text: "Processing", link: "/orders/processing" },
-    { text: "Delivered", link: "/orders/delivered" },
-    { text: "Cancelled", link: "/orders/cancelled" },
+    { link: "/orders", label: "All Orders" },
+    { link: "/orders/pending", label: "Pending Orders" },
+    { link: "/order/delivered", label: "Delivered" },
+    { link: "/order/cancelled", label: "Cancelled" },
   ];
 
   return (
@@ -112,12 +107,15 @@ export default function Sidebar() {
         </button>
         {ordersOpen && (
           <div className="ml-4 border-l border-white/10 pl-4 space-y-0.5 flex flex-col">
-            <NavLink
-              to="/orders"
-              className="w-full text-left px-3 py-2 rounded-md text-sm text-gray-400 hover:text-gray-200"
-            >
-              All Orders
-            </NavLink>
+            {orderLinks.map(({ label, link }, i) => (
+              <NavLink
+                to={link}
+                key={i}
+                className="w-full text-left px-3 py-2 rounded-md text-sm text-gray-400 hover:text-gray-200"
+              >
+                {label}
+              </NavLink>
+            ))}
           </div>
         )}
 
