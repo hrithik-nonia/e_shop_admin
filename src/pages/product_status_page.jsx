@@ -12,10 +12,9 @@ import {
 } from "lucide-react";
 import CategoryFilterSidebar from "../component/filter_category_dropdown";
 import AddProductForm from "../component/add_product";
-import axios from "axios";
 import { AppContext } from "../app_context/context";
 import EditProductModal from "../component/edit_product_model";
-import { getAllProduct } from "../api/api";
+import CountService, { getAllProduct } from "../api/api";
 
 const statusStyles = {
   "In Stock": "bg-green-100 text-green-700",
@@ -39,54 +38,27 @@ export default function ProductsDashboard() {
   const [productCount, setProductCount] = useState(0);
 
   useEffect(() => {
-    const fetchProductCount = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8000/api/products/count",
-        );
-
-        setProductCount(response.data); // ya jo bhi key ho response mein
-      } catch (err) {
-        console.error("Failed to fetch product count:", err);
-      }
-    };
-    fetchProductCount();
+    CountService.totalCount().then((data) => {
+      setProductCount(data);
+    });
   }, []);
 
   // active product count
   const [activeProductCount, setActiveProductCount] = useState(0);
 
   useEffect(() => {
-    const fetchActiveProductCount = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8000/api/products/active_count",
-        );
-
-        setActiveProductCount(response.data); // ya jo bhi key ho response mein
-      } catch (err) {
-        console.error("Failed to fetch active product count:", err);
-      }
-    };
-    fetchActiveProductCount();
+    CountService.activeProductsCount().then((data) => {
+      setActiveProductCount(data);
+    });
   }, []);
 
   // low stock product count
   const [lowStockProductCount, setLowStockProductCount] = useState(0);
 
   useEffect(() => {
-    const fetchLowStockProductCount = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8000/api/products/low_stock_count",
-        );
-
-        setLowStockProductCount(response.data); // ya jo bhi key ho response mein
-      } catch (err) {
-        console.error("Failed to fetch low stock product count:", err);
-      }
-    };
-    fetchLowStockProductCount();
+    CountService.lowStockProductsCount().then((data) => {
+      setLowStockProductCount(data);
+    });
   }, []);
 
   const stats = [
@@ -123,7 +95,7 @@ export default function ProductsDashboard() {
   // --------------------------------
 
   // -----------------fetch all product--------------
-  const LIMIT = 8;
+  const LIMIT = 10;
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -138,6 +110,7 @@ export default function ProductsDashboard() {
       setProducts((prev) => [...prev, ...data]);
       setHasMore(data.length === LIMIT);
       setSkip(currentSkip + LIMIT);
+      console.log("component" + data);
     } catch (error) {
       console.log(error);
     } finally {
