@@ -15,48 +15,7 @@ import AddProductForm from "../component/add_product";
 import axios from "axios";
 import { AppContext } from "../app_context/context";
 import EditProductModal from "../component/edit_product_model";
-const products = [
-  {
-    id: 1,
-    name: "iPhone 13",
-    sku: "A-101",
-    price: "$799",
-    stock: 50,
-    status: "In Stock",
-  },
-  {
-    id: 2,
-    name: "iPhone 13 Pro",
-    sku: "A-102",
-    price: "$899",
-    stock: 50,
-    status: "Out of Stock",
-  },
-  {
-    id: 3,
-    name: "iPhone 13 Mafk",
-    sku: "A-103",
-    price: "$999",
-    stock: 50,
-    status: "Draft",
-  },
-  {
-    id: 4,
-    name: "iPhone 13 Pro Mash",
-    sku: "A-104",
-    price: "$799",
-    stock: 50,
-    status: "In Stock",
-  },
-  {
-    id: 5,
-    name: "iPhone 13 Lilop",
-    sku: "A-101",
-    price: "$799",
-    stock: 50,
-    status: "Draft",
-  },
-];
+import { getAllProduct } from "../api/api";
 
 const statusStyles = {
   "In Stock": "bg-green-100 text-green-700",
@@ -73,10 +32,9 @@ export default function ProductsDashboard() {
     setShowEditProductModel,
   } = useContext(AppContext);
   // state for show add product panel
-  const [selected, setSelected] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(false);
 
-  // product count
+  // ---------------product count-----------------
   // total product count
   const [productCount, setProductCount] = useState(0);
 
@@ -164,11 +122,35 @@ export default function ProductsDashboard() {
 
   // --------------------------------
 
-  const toggleSelect = (id) => {
-    setSelected((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
-    );
+  // -----------------fetch all product--------------
+  const LIMIT = 8;
+
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [skip, setSkip] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+
+  const fetchAllProduct = async (currentSkip) => {
+    if (loading) return;
+    setLoading(true);
+    try {
+      const data = await getAllProduct(currentSkip, LIMIT);
+      setProducts((prev) => [...prev, ...data]);
+      setHasMore(data.length === LIMIT);
+      setSkip(currentSkip + LIMIT);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    async function fetchData() {
+      await fetchAllProduct(skip);
+    }
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -244,12 +226,6 @@ export default function ProductsDashboard() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-t border-gray-100 text-gray-500 text-xs">
-                  <th className="px-5 py-3 text-left w-10">
-                    <input
-                      type="checkbox"
-                      className="rounded border-gray-300"
-                    />
-                  </th>
                   <th className="px-3 py-3 text-left font-medium">Image</th>
                   <th className="px-3 py-3 text-left font-medium">
                     Product Name
@@ -264,16 +240,13 @@ export default function ProductsDashboard() {
               <tbody>
                 {products.map((p) => (
                   <tr key={p.id} className="border-t border-gray-100 ">
-                    <td className="px-5 py-3">
-                      <input
-                        type="checkbox"
-                        checked={selected.includes(p.id)}
-                        onChange={() => toggleSelect(p.id)}
-                        className="rounded border-gray-300"
-                      />
-                    </td>
                     <td className="px-3 py-3">
-                      <div className="w-9 h-9 rounded-md bg-gray-900" />
+                      <div className="w-9 h-9 rounded-md ">
+                        <img
+                          src={`http://localhost:8000/uploads/${p.image}`}
+                          alt={p.name}
+                        />
+                      </div>
                     </td>
                     <td className="px-3 py-3 text-gray-800">{p.name}</td>
                     <td className="px-3 py-3 text-gray-500">{p.sku}</td>
